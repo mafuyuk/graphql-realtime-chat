@@ -1,3 +1,6 @@
 # Generated code for gqlgen
 graph/generated.go
 graph/models_gen.go
+
+# build
+server
