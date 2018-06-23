@@ -1,0 +1,4 @@
+{
+  "User": "github.com/mafuyuk/graphql-realtime-chat/gettingstarted/server/graph/graph.User",
+  "Todo": "github.com/mafuyuk/graphql-realtime-chat/gettingstarted/server/graph/graph.Todo"
+}
