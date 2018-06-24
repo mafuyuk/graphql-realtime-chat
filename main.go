@@ -34,19 +34,13 @@ func main() {
 	}
 	defer conn.Close()
 
-	conn.Do("SET", "user", "tanaka")
-	conn.Do("SET", "user", "oota")
-
-
-	s, err := redis.String(conn.Do("GET", "user"))
+	graphQLServer, err := server.NewGraphQLServer(conn)
 	if err != nil {
 		fmt.Println(err)
+		panic(err)
 	}
-	fmt.Printf("redis res: %#v", s)
-
-	app := &server.MyApp{}
 	http.Handle("/", handler.Playground("Todo", "/query"))
-	http.Handle("/query", handler.GraphQL(server.MakeExecutableSchema(app)))
+	http.Handle("/query", handler.GraphQL(server.MakeExecutableSchema(graphQLServer)))
 
 	fmt.Println("Lisiening on :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
