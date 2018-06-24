@@ -1,4 +1,5 @@
-package graph
+//go:generate gqlgen -schema ./schema.graphql
+package server
 
 import (
 	"context"

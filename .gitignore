@@ -1,0 +1,6 @@
+# Generated code for gqlgen
+graphql/generated.go
+graphql/models_gen.go
+
+# build
+graphql-realtime-chat
