@@ -31,6 +31,11 @@ func main() {
 		log.Fatal(err)
 		panic(err)
 	}
+	defer redis.Close()
+
+	redis.Do("SET", "user", "tanaka")
+	redis.Do("SET", "user", "oota")
+	redis.Do("GET", "user")
 
 	app := &server.MyApp{}
 	http.Handle("/", handler.Playground("Todo", "/query"))
