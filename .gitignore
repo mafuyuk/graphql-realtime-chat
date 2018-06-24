@@ -5,5 +5,8 @@ server/models_gen.go
 # build
 graphql-realtime-chat
 
+# vendor
+vendor
+
 # idea
 .idea

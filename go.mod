@@ -1,9 +1,11 @@
 module github.com/mafuyuk/graphql-realtime-chat
 
 require (
+	github.com/garyburd/redigo v1.6.0
 	github.com/go-chi/chi v1.0.0
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
+	github.com/kelseyhightower/envconfig v1.3.0
 	github.com/mitchellh/mapstructure v0.0.0-20180511142126-bb74f1db0675
 	github.com/shurcooL/vfsgen v0.0.0-20180414153424-bded413e56ef
 	github.com/stretchr/objx v0.1.1

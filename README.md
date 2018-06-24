@@ -7,6 +7,15 @@ $ go get -u github.com/vektah/gqlgen
 
 ```
 
+# 開発時
+```bash
+$ docker-compose up -d
+$ cd server
+$ go generate ./...
+$ vgo mod -vendor
+$ export REDIS_ADDR=
+$ go run main.go
+```
 # サーバー起動方法
 ```bash
 $ cd server
