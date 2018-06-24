@@ -13,7 +13,7 @@ $ docker-compose up -d
 $ cd server
 $ go generate ./...
 $ vgo mod -vendor
-$ export REDIS_ADDR=
+$ export REDIS_ADDR=localhost:6379
 $ go run main.go
 ```
 # サーバー起動方法

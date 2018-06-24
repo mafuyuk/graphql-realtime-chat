@@ -8,7 +8,7 @@ import (
 	"github.com/mafuyuk/graphql-realtime-chat/server"
 
 	"github.com/vektah/gqlgen/handler"
-  "github.com/garyburd/redigo/redis"
+  "github.com/gomodule/redigo/redis"
   "github.com/kelseyhightower/envconfig"
 )
 
@@ -18,24 +18,31 @@ type redisConf struct {
 
 func main() {
 	// 環境変数の取得
-	c, err := getEnvConfig()
-	if err != nil {
+	var conf redisConf
+	if err := envconfig.Process("", &conf); err != nil {
 		log.Fatal(err)
 		panic(err)
 	}
-	fmt.Printf("環境変数: %#v", c)
+
+	fmt.Printf("環境変数: %#v", conf)
 
 	// Redisへ接続
-	redis, err := redisConnection(c.Addr)
+	conn, err := redis.Dial("tcp", conf.Addr)
 	if err != nil {
 		log.Fatal(err)
 		panic(err)
 	}
-	defer redis.Close()
+	defer conn.Close()
 
-	redis.Do("SET", "user", "tanaka")
-	redis.Do("SET", "user", "oota")
-	redis.Do("GET", "user")
+	conn.Do("SET", "user", "tanaka")
+	conn.Do("SET", "user", "oota")
+
+
+	s, err := redis.String(conn.Do("GET", "user"))
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Printf("redis res: %#v", s)
 
 	app := &server.MyApp{}
 	http.Handle("/", handler.Playground("Todo", "/query"))
@@ -44,18 +51,4 @@ func main() {
 	fmt.Println("Lisiening on :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 
-}
-
-func getEnvConfig() (*redisConf, error) {
-	var conf redisConf
-	err := envconfig.Process("", &conf)
-	return &conf, err
-}
-
-func redisConnection(addr string) (redis.Conn, error) {
-	c, err := redis.Dial("tcp", addr)
-	if err != nil {
-		return nil, err
-	}
-	return &c, nil
 }
