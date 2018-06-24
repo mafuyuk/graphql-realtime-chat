@@ -8,14 +8,24 @@ $ ./server
 # GraphQLサーバーの呼び出し
 ```bash
 # 作成
-curl -XPOST -H 'Content-Type:application/json' \
- -d '{"query": "mutation createTodo { createTodo(text:\"test\") { user {   id } text done }}"}' \
- http://localhost:8080/query
+curl http://localhost:8080/query -XPOST -H 'Content-Type:application/json' \
+-d \
+'
+{
+  "query": "mutation createTodo { createTodo(text:\"test\") { user {   id } text done }}"
+}
+'
+ 
 
 # 取得
-curl -XPOST -H 'Content-Type:application/json' \
- -d '{"query": "query findTodos { todos { text done user {   name } } }"}' \
- http://localhost:8080/query
+curl http://localhost:8080/query -XPOST -H 'Content-Type:application/json' \
+-d \
+'
+{
+  "query": "query findTodos { todos { text done user {   name } } }"
+}
+'
+ 
 
 ```
 
