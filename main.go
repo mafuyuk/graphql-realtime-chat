@@ -1,15 +1,15 @@
 package main
 
 import (
-	"net/http"
-	"log"
 	"fmt"
+	"log"
+	"net/http"
 
 	"github.com/mafuyuk/graphql-realtime-chat/server"
 
+	"github.com/gomodule/redigo/redis"
+	"github.com/kelseyhightower/envconfig"
 	"github.com/vektah/gqlgen/handler"
-  "github.com/gomodule/redigo/redis"
-  "github.com/kelseyhightower/envconfig"
 )
 
 type redisConf struct {

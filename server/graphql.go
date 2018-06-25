@@ -3,6 +3,7 @@ package server
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"math/rand"
 
@@ -15,35 +16,38 @@ type graphQLServer struct {
 
 func NewGraphQLServer(conn redis.Conn) (*graphQLServer, error) {
 	return &graphQLServer{
-		redisConn:     conn,
+		redisConn: conn,
 	}, nil
 }
 
 func (g *graphQLServer) Query_todos(ctx context.Context) ([]Todo, error) {
 	var todos []Todo
-	v, err := redis.Values(g.redisConn.Do("HGETALL", "todo"))
+	values, err := redis.ByteSlices(g.redisConn.Do("LRANGE", "todo", 0, -1))
 	if err != nil {
 		return todos, err
 	}
-	fmt.Printf("%#v", v) //todo
 
-	if err := redis.ScanStruct(v, &todos); err != nil {
-		return todos, err
+	for _, v := range values {
+		var todo Todo
+		json.Unmarshal(v, &todo)
+		todos = append(todos, todo)
 	}
+
 	return todos, nil
 }
 
 func (g *graphQLServer) Mutation_createTodo(ctx context.Context, text string) (Todo, error) {
 	todo := Todo{
-		Text:   text,
-		ID:     fmt.Sprintf("T%d", rand.Int()),
+		Text: text,
+		ID:   fmt.Sprintf("T%d", rand.Int()),
 		User: User{
 			ID: fmt.Sprintf("U%d", rand.Int()),
 		},
 	}
 
-	g.redisConn.Do("HSET", "todo", "id", rand.Int())
-	g.redisConn.Do("HSET", "todo", "text", text)
+	mj, _ := json.Marshal(todo)
+
+	g.redisConn.Do("LPUSH", "todo", mj)
 	return todo, nil
 }
 
