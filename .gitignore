@@ -3,7 +3,7 @@ server/generated.go
 server/models_gen.go
 
 # build
-graphql-realtime-chat
+bin
 
 # vendor
 vendor
