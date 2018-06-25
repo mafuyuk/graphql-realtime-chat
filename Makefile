@@ -29,7 +29,7 @@ run: setup
 	@export REDIS_ADDR=localhost:6379 && go run main.go
 
 ## Docker
-CONTAINER_PREFIX:=graphql
+CONTAINER_PREFIX:=graphql-realtime-chat
 
 .PHONY: dstart dstop dstatus dlogin dclean dlog
 dstart: setup
