@@ -3,13 +3,11 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 
 	"github.com/mafuyuk/graphql-realtime-chat/server"
 
 	"github.com/gomodule/redigo/redis"
 	"github.com/kelseyhightower/envconfig"
-	"github.com/vektah/gqlgen/handler"
 )
 
 type redisConf struct {
@@ -34,15 +32,16 @@ func main() {
 	}
 	defer conn.Close()
 
-	graphQLServer, err := server.NewGraphQLServer(conn)
+	s, err := server.NewGraphQLServer(conn)
 	if err != nil {
 		fmt.Println(err)
 		panic(err)
 	}
-	http.Handle("/", handler.Playground("Todo", "/query"))
-	http.Handle("/query", handler.GraphQL(server.MakeExecutableSchema(graphQLServer)))
 
+	if err := s.Serve("/graphql",8080); err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
 	fmt.Println("Lisiening on :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
 
 }

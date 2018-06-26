@@ -2,12 +2,13 @@
 package server
 
 import (
-	"context"
-	"encoding/json"
 	"fmt"
-	"math/rand"
+	"net/http"
 
 	"github.com/gomodule/redigo/redis"
+	"github.com/vektah/gqlgen/handler"
+	"github.com/gorilla/websocket"
+	"github.com/rs/cors"
 )
 
 type graphQLServer struct {
@@ -20,37 +21,20 @@ func NewGraphQLServer(conn redis.Conn) (*graphQLServer, error) {
 	}, nil
 }
 
-func (g *graphQLServer) Query_todos(ctx context.Context) ([]Todo, error) {
-	var todos []Todo
-	values, err := redis.ByteSlices(g.redisConn.Do("LRANGE", "todo", 0, -1))
-	if err != nil {
-		return todos, err
-	}
+func (s *graphQLServer) Serve(route string, port int) error {
+	mux := http.NewServeMux()
+	mux.Handle(
+		route,
+		handler.GraphQL(MakeExecutableSchema(s),
+			handler.WebsocketUpgrader(websocket.Upgrader{
+				CheckOrigin: func(r *http.Request) bool {
+					return true
+				},
+			}),
+		),
+	)
+	mux.Handle("/playground", handler.Playground("GraphQL", route))
 
-	for _, v := range values {
-		var todo Todo
-		json.Unmarshal(v, &todo)
-		todos = append(todos, todo)
-	}
-
-	return todos, nil
-}
-
-func (g *graphQLServer) Mutation_createTodo(ctx context.Context, text string) (Todo, error) {
-	todo := Todo{
-		Text: text,
-		ID:   fmt.Sprintf("T%d", rand.Int()),
-		User: User{
-			ID: fmt.Sprintf("U%d", rand.Int()),
-		},
-	}
-
-	mj, _ := json.Marshal(todo)
-
-	g.redisConn.Do("LPUSH", "todo", mj)
-	return todo, nil
-}
-
-func (g *graphQLServer) Todo_user(ctx context.Context, it *Todo) (User, error) {
-	return User{ID: it.User.ID, Name: "user " + it.User.ID}, nil
+	handler := cors.AllowAll().Handler(mux)
+	return http.ListenAndServe(fmt.Sprintf(":%d", port), handler)
 }
