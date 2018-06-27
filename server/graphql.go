@@ -2,17 +2,17 @@
 package server
 
 import (
-	"fmt"
-	"net/http"
+	"context"
+	"sync"
 
 	"github.com/gomodule/redigo/redis"
-	"github.com/vektah/gqlgen/handler"
-	"github.com/gorilla/websocket"
-	"github.com/rs/cors"
 )
 
 type graphQLServer struct {
-	redisConn redis.Conn
+	redisConn       redis.Conn
+	messageChannels map[string]chan Message
+	userChannels    map[string]chan string
+	mutex           sync.Mutex
 }
 
 func NewGraphQLServer(conn redis.Conn) (*graphQLServer, error) {
@@ -21,20 +21,22 @@ func NewGraphQLServer(conn redis.Conn) (*graphQLServer, error) {
 	}, nil
 }
 
-func (s *graphQLServer) Serve(route string, port int) error {
-	mux := http.NewServeMux()
-	mux.Handle(
-		route,
-		handler.GraphQL(MakeExecutableSchema(s),
-			handler.WebsocketUpgrader(websocket.Upgrader{
-				CheckOrigin: func(r *http.Request) bool {
-					return true
-				},
-			}),
-		),
-	)
-	mux.Handle("/playground", handler.Playground("GraphQL", route))
+func (s *graphQLServer) Mutation_postMessage(ctx context.Context, user string, text string) (*Message, error) {
+	return nil, nil
+}
 
-	handler := cors.AllowAll().Handler(mux)
-	return http.ListenAndServe(fmt.Sprintf(":%d", port), handler)
+func (s *graphQLServer) Query_messages(ctx context.Context) ([]Message, error) {
+	return nil, nil
+}
+
+func (s *graphQLServer) Query_users(ctx context.Context) ([]string, error) {
+	return nil, nil
+}
+
+func (s *graphQLServer) Subscription_messagePosted(ctx context.Context, user string) (<-chan Message, error) {
+	return nil, nil
+}
+
+func (s *graphQLServer) Subscription_userJoined(ctx context.Context, user string) (<-chan string, error) {
+	return nil, nil
 }

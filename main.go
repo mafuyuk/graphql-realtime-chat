@@ -3,11 +3,15 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/mafuyuk/graphql-realtime-chat/server"
 
 	"github.com/gomodule/redigo/redis"
+	"github.com/gorilla/websocket"
 	"github.com/kelseyhightower/envconfig"
+	"github.com/rs/cors"
+	"github.com/vektah/gqlgen/handler"
 )
 
 type redisConf struct {
@@ -38,10 +42,21 @@ func main() {
 		panic(err)
 	}
 
-	if err := s.Serve("/graphql",8080); err != nil {
-		fmt.Println(err)
-		panic(err)
-	}
-	fmt.Println("Lisiening on :8080")
+	mux := http.NewServeMux()
+	mux.Handle(
+		"/graphql",
+		handler.GraphQL(server.MakeExecutableSchema(s),
+			handler.WebsocketUpgrader(websocket.Upgrader{
+				CheckOrigin: func(r *http.Request) bool {
+					return true
+				},
+			}),
+		),
+	)
+	mux.Handle("/playground", handler.Playground("GraphQL", "/graphql"))
 
+	h := cors.AllowAll().Handler(mux)
+	http.ListenAndServe(fmt.Sprintf(":%d", 8080), h)
+
+	fmt.Println("Lisiening on :8080")
 }
