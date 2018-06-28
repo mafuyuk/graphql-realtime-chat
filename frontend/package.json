@@ -8,6 +8,7 @@
     "start": "webpack-dev-server --mode development --open"
   },
   "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "web3": "0.20.0"
