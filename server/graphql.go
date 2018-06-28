@@ -25,6 +25,8 @@ func NewGraphQLServer(conn redis.Conn) (*graphQLServer, error) {
 	}, nil
 }
 
+const redisQueue = "message"
+
 func (s *graphQLServer) Mutation_postMessage(ctx context.Context, user string, text string) (*Message, error) {
 	message := &Message{
 		ID:   fmt.Sprintf("T%d", rand.Int()),
@@ -38,12 +40,24 @@ func (s *graphQLServer) Mutation_postMessage(ctx context.Context, user string, t
 		return nil, err
 	}
 
-	s.redisConn.Do("LPUSH", "message", mj)
+	s.redisConn.Do("LPUSH", redisQueue, mj)
 	return message, nil
 }
 
 func (s *graphQLServer) Query_messages(ctx context.Context) ([]Message, error) {
-	return nil, nil
+	var messages []Message
+	values, err := redis.ByteSlices(s.redisConn.Do("LRANGE", redisQueue, 0, -1))
+	if err != nil {
+		return messages, err
+	}
+
+	for _, v := range values {
+		var m Message
+		json.Unmarshal(v, &m)
+		messages = append(messages, m)
+	}
+
+	return messages, nil
 }
 
 func (s *graphQLServer) Query_users(ctx context.Context) ([]string, error) {
