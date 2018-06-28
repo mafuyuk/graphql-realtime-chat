@@ -17,21 +17,23 @@ $ make run
 ### GraphQLサーバーの呼び出し
 ```bash
 # 作成
-curl http://localhost:8080/query -XPOST -H 'Content-Type:application/json' \
+curl http://localhost:8080/graphql -XPOST -H 'Content-Type:application/json' \
 -d \
 '
 {
-  "query": "mutation createTodo { createTodo(text:\"test\") { user {   id } text done }}"
+  "query": "mutation postMessage { postMessage(user:\"taro\", text:\"test text\") { user id text }}"
 }
 '
+
+
  
 
 # 取得
-curl http://localhost:8080/query -XPOST -H 'Content-Type:application/json' \
+curl http://localhost:8080/graphql -XPOST -H 'Content-Type:application/json' \
 -d \
 '
 {
-  "query": "query findTodos { todos { text done user {   name } } }"
+  "query": "query messages { messages { user id text } }"
 }
 '
  

@@ -4,6 +4,10 @@ package server
 import (
 	"context"
 	"sync"
+	"fmt"
+	"math/rand"
+	"encoding/json"
+	"time"
 
 	"github.com/gomodule/redigo/redis"
 )
@@ -22,7 +26,20 @@ func NewGraphQLServer(conn redis.Conn) (*graphQLServer, error) {
 }
 
 func (s *graphQLServer) Mutation_postMessage(ctx context.Context, user string, text string) (*Message, error) {
-	return nil, nil
+	message := &Message{
+		ID:   fmt.Sprintf("T%d", rand.Int()),
+		User: user,
+		Text: text,
+		CreatedAt: time.Now().UTC(),
+	}
+
+	mj, err := json.Marshal(message)
+	if err != nil {
+		return nil, err
+	}
+
+	s.redisConn.Do("LPUSH", "message", mj)
+	return message, nil
 }
 
 func (s *graphQLServer) Query_messages(ctx context.Context) ([]Message, error) {
