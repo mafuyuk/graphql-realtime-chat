@@ -21,7 +21,7 @@ curl http://localhost:8080/graphql -XPOST -H 'Content-Type:application/json' \
 -d \
 '
 {
-  "query": "mutation postMessage { postMessage(user:\"taro\", text:\"test text\") { user id text }}"
+  "query": "mutation { postMessage(user:\"taro\", text:\"test text\") { user id text }}"
 }
 '
 
@@ -33,7 +33,7 @@ curl http://localhost:8080/graphql -XPOST -H 'Content-Type:application/json' \
 -d \
 '
 {
-  "query": "query messages { messages { user id text } }"
+  "query": "query { messages { user id text } }"
 }
 '
  

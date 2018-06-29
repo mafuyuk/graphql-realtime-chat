@@ -1,30 +1,39 @@
-require('isomorphic-fetch');
+const { createApolloFetch } = require('apollo-fetch');
 
 class GraphQL {
-  constructor(url) {
-    this.url = url;
-    this.config = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-    };
+  constructor(uri) {
+    this.apolloFetch = createApolloFetch({ uri });
   }
 
   postMessage(user, text) {
-    return fetch(this.url, Object.assign({
-      body: JSON.stringify({
-        query: `mutation postMessage { postMessage(user:"${user}", text:"${text}") { user id text }}`
-      })
-    }, this.config))
-      .then(res => res.json());
+    const query = `
+      mutation {
+        postMessage(user:$user,text:$text) {
+          user,
+          id,
+          text,
+        }
+      }`;
+
+    return this.apolloFetch({
+      query,
+      variables: {
+        user,
+        text
+      }
+    });
   }
 
   messages() {
-    return fetch(this.url, Object.assign({
-      body: JSON.stringify({
-        query: "query messages { messages { user id text } }"
-      })
-    }, this.config))
-      .then(res => res.json());
+    const query =`
+      query {
+        messages {
+          user,
+          id,
+          text,
+        }
+      }`;
+    return this.apolloFetch({ query });
   }
 }
 
