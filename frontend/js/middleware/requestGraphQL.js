@@ -8,7 +8,7 @@ class GraphQL {
   postMessage(user, text) {
     const query = `
       mutation {
-        postMessage(user:$user,text:$text) {
+        postMessage(user:"${user}",text:"${text}") {
           user,
           id,
           text,
@@ -17,10 +17,10 @@ class GraphQL {
 
     return this.apolloFetch({
       query,
-      variables: {
-        user,
-        text
-      }
+      // variables: { TODO
+      //   user,
+      //   text
+      // }
     });
   }
 
