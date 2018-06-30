@@ -77,6 +77,7 @@ func (s *graphQLServer) Query_users(ctx context.Context) ([]string, error) {
 }
 
 func (s *graphQLServer) Subscription_messagePosted(ctx context.Context, user string) (<-chan Message, error) {
+	fmt.Println("call Subscription_messagePosted")
 	s.createUser(user)
 
 	// Create new channel for request
@@ -97,6 +98,7 @@ func (s *graphQLServer) Subscription_messagePosted(ctx context.Context, user str
 }
 
 func (s *graphQLServer) Subscription_userJoined(ctx context.Context, user string) (<-chan string, error) {
+	fmt.Println("call Subscription_userJoined")
 	s.createUser(user)
 
 	// Create new channel for request
