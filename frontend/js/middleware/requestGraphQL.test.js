@@ -6,3 +6,6 @@ g.postMessage("mafuyuk1", "aaaaa")
 
 g.messages()
   .then(res => console.log(res.data)).catch(err => console.log(err));
+
+g.users()
+  .then(res => console.log(res.data)).catch(err => console.log(err));

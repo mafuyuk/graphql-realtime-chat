@@ -35,6 +35,14 @@ class GraphQL {
       }`;
     return this.apolloFetch({ query });
   }
+
+  users() {
+    const query =`
+      query {
+        users 
+      }`;
+    return this.apolloFetch({ query });
+  }
 }
 
 module.exports = GraphQL;
