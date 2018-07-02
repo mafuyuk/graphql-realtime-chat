@@ -2,11 +2,11 @@ import React from 'react';
 
 const MessageForm = () => {
   return (
-    <form class="col-12">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Message..." >
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary" type="submit">Post</button>
+    <form className="col-12">
+      <div className="input-group">
+        <input type="text" className="form-control" placeholder="Message..." />
+        <div className="input-group-append">
+          <button className="btn btn-outline-secondary" type="submit">Post</button>
         </div>
       </div>
     </form>
