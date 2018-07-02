@@ -1,6 +1,9 @@
 import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Route
+} from 'react-router-dom'
 
 import Login from './js/components/Login';
 import MessageForm from './js/components/MessageForm';
@@ -10,16 +13,16 @@ import './css/index.css';
 const Home = () => {
   return (
     <Fragment>
-      <p>Hello</p>
-      <MessageForm />
+      <h2>Home</h2>
     </Fragment>
   );
 };
 
-const Root = () => {
+const Rooting = () => {
   return (
     <Fragment>
-      <Route path="/" component={Root} />
+      <Home />
+      <Route exact path="/" component={MessageForm} />
       <Route path="/login" component={Login} />
     </Fragment>
   );
@@ -27,7 +30,7 @@ const Root = () => {
 
 const rootElement = document.getElementById("root");
 ReactDOM.render((
-  <BrowserRouter>
-    <Root />
-  </BrowserRouter>
+  <Router>
+    <Rooting />
+  </Router>
 ), rootElement);
