@@ -2,11 +2,13 @@ import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
 import {
   BrowserRouter as Router,
-  Route
+  Route,
+  Switch
 } from 'react-router-dom'
 
 import Login from './js/components/Login';
 import MessageForm from './js/components/MessageForm';
+import NotFound from './js/components/NotFound';
 
 import './css/index.css';
 
@@ -22,8 +24,11 @@ const Rooting = () => {
   return (
     <Fragment>
       <Home />
-      <Route exact path="/" component={MessageForm} />
-      <Route path="/login" component={Login} />
+      <Switch>
+        <Route exact path="/" component={MessageForm} />
+        <Route path="/login" component={Login} />
+        <Route component={NotFound} />
+      </Switch>
     </Fragment>
   );
 };
