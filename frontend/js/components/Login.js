@@ -1,12 +1,13 @@
 import React, {Fragment} from 'react';
+import {Input, Button} from 'react-bootstrap';
 
 const Login = () => {
   return (
     <Fragment>
-      <input  type="text" className="form-control" placeholder="Username..." required />
-      <button className="btn btn-secondary" type="submit">Log in</button>
+      <Input className="form-control" type="text" label="A" value="a" bsSize="lg" bsStyle="success" />
+      <Button className="btn btn-secondary">{'Log in'}</Button>
     </Fragment>
   )
-}
+};
 
 export default Login;
