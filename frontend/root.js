@@ -6,28 +6,20 @@ import {
   Switch
 } from 'react-router-dom'
 
-import Login from './js/components/Login';
-import MessageForm from './js/components/MessageForm';
-import NotFound from './js/components/NotFound';
+import AppContainer from './js/containers/app';
+import LoginContainer from './js/containers/login';
+import NotFoundContainer from './js/containers/NotFound';
 
 import './css/index.css';
 
-const Home = () => {
-  return (
-    <Fragment>
-      <h2>Home</h2>
-    </Fragment>
-  );
-};
 
 const Rooting = () => {
   return (
     <Fragment>
-      <Home />
       <Switch>
-        <Route exact path="/" component={MessageForm} />
-        <Route path="/login" component={Login} />
-        <Route component={NotFound} />
+        <Route exact path="/" component={AppContainer} />
+        <Route path="/login" component={LoginContainer} />
+        <Route component={NotFoundContainer} />
       </Switch>
     </Fragment>
   );
