@@ -1,11 +1,14 @@
 import React, {Fragment} from 'react';
-import {Input, Button} from 'react-bootstrap';
+import Button from '@material-ui/core/Button';
+import Input from '@material-ui/core/Input';
 
 const Login = () => {
   return (
     <Fragment>
-      <Input className="form-control" type="text" label="A" value="a" bsSize="lg" bsStyle="success" />
-      <Button className="btn btn-secondary">{'Log in'}</Button>
+      <Input type="text" />
+      <Button variant="raised" color="primary">
+        Log in
+      </Button>
     </Fragment>
   )
 };
