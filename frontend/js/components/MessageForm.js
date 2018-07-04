@@ -1,15 +1,16 @@
 import React from 'react';
+import FormControl from '@material-ui/core/FormControl';
+import Button from '@material-ui/core/Button';
+import Input from '@material-ui/core/Input';
 
 const MessageForm = () => {
   return (
-    <form className="col-12">
-      <div className="input-group">
-        <input type="text" className="form-control" placeholder="Message..." />
-        <div className="input-group-append">
-          <button className="btn btn-outline-secondary" type="submit">Post</button>
-        </div>
-      </div>
-    </form>
+    <FormControl>
+      <Input type="text" placeholder="Message..." />
+      <Button type="submit" >
+        Post
+      </Button>
+    </FormControl>
   );
 };
 
