@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 const Home = () => {
   return (
     <Fragment>
-      <h2>Home</h2>
+      <h2>GraphQL Chat</h2>
     </Fragment>
   );
 };
